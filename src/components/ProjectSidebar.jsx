@@ -1,4 +1,5 @@
 import Button from "./Button";
+import { useEffect, useState } from "react";
 import app from "../firebase.js";
 import {getFirestore, getDocs, collection, doc} from "firebase/firestore"
 
@@ -8,27 +9,45 @@ const db = getFirestore(app);
 const colRef = collection(db, "users");
 
 
-const fetchDocs = () => {
-  getDocs(colRef)
-  .then((snapshot) => {
-    snapshot.forEach(doc)
-  })
-  .catch((error) => {
-    console.log(error)
-  })}
+
+
+// const fetchDocs = () => {
+//   getDocs(colRef)
+//   .then((snapshot) => {
+//     snapshot.forEach(doc)
+//   })
+//   .catch((error) => {
+//     console.log(error)
+//   })}
 
 
 export default function ProjectSidebar({
   onStartAddProject,
-  projects,
   onSelectProject,
   selectedProjectId,
-})
-// const permanentDisplay(projects) => {
+  projects
+}){
 
-// }
 
-{
+
+[projects, setProjects] = useState([]);
+  
+
+useEffect (() => {
+  const fetchProjects = async () => {
+    const db = getFirestore(app);
+    const colRef = collection(db, "users");
+    const projectSnapshot = await getDocs(colRef);
+    const projectList = projectSnapshot.docs.map(doc  =>({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    setProjects(projectList);
+  }
+  fetchProjects().catch(console.error);
+
+}, [])
+
   return (
     <aside className="w-1/3 px-8 py-16 shadow-x1 bg-gray-700 text-gray-50 md:w-72 rounded-r-xl">
       <h2 className="mb-8 font-bold text-4xl text-gray-200">
