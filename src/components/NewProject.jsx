@@ -7,7 +7,11 @@ import {  getFirestore, addDoc, doc, collection, Timestamp  } from "firebase/fir
 
 
 const auth = getAuth(app);
-const db = getFirestore();
+const db = getFirestore(app);
+// export const projectData = {
+
+// }
+
 
 
 const addProject = async (project) => {
@@ -56,7 +60,8 @@ export default function NewProject({ onAdd, onCancel }) {
       dueDate: Timestamp.fromDate(new Date(enteredDueDate)),
       createdAt: Timestamp.now(),
     }
-
+    
+    
    addProject(projectData)
     .then((projectId) => {
       console.log(`Project id: ${projectId}`);
@@ -65,7 +70,10 @@ export default function NewProject({ onAdd, onCancel }) {
     .catch((error) =>{
       console.log(`Error: ${error}`);
     })
+    
   }
+
+  
 
  // testing
 
