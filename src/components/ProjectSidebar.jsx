@@ -2,10 +2,31 @@ import Button from "./Button";
 import style from '../style/projectSidebar.module.css';
 export default function ProjectSidebar({
   onStartAddProject,
-  projects,
   onSelectProject,
   selectedProjectId,
-}) {
+  projects
+}){
+
+
+
+[projects, setProjects] = useState([]);
+  
+
+useEffect (() => {
+  const fetchProjects = async () => {
+    const db = getFirestore(app);
+    const colRef = collection(db, "users");
+    const projectSnapshot = await getDocs(colRef);
+    const projectList = projectSnapshot.docs.map(doc  =>({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    setProjects(projectList);
+  }
+  fetchProjects().catch(console.error);
+
+}, [])
+
   return (
     <>
       <div class={style.sidebar}>
